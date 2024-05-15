@@ -1,0 +1,55 @@
+﻿@page "/account/notifications"
+
+@using System.ComponentModel.DataAnnotations
+@using Frontend.Components.Sections
+@using Microsoft.AspNetCore.Identity
+@using Frontend.Data
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+
+<PageTitle>Profile - Notifications</PageTitle>
+
+<section class="account-details">
+
+    <div class="container">
+
+        <AccountMenu user="@user" />
+
+        <div class="account-details-forms">
+
+            <h1 class="h3">Account Notifications</h1>
+
+            <p class="h4">Basic Info</p>
+
+            <EditForm Model="user" method="post" FormName="UserContactInformation" id="account-details-basic-info-form" OnValidSubmit="ToggleNewsletter" novalidate>
+                <DataAnnotationsValidator />
+            </EditForm>
+        </div>
+    </div>
+</section>
+
+@code {
+    private ApplicationUser user { get; set; } = new();
+    private AddressEntity userAddress { get; set; } = new();
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+        try
+        {
+            if (user.Address != null)
+                userAddress = user.Address!;
+        }
+        catch { }
+    }
+
+    private async Task ToggleNewsletter()
+    {
+        
+    }
+
+}

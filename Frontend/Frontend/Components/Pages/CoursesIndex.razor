@@ -1,0 +1,17 @@
+﻿@page "/courses"
+@using Frontend.Components.Pages.Courses
+@using Frontend.Components.Pages
+
+<PageTitle>Courses</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <CoursesGrid />
+    </Authorized>
+
+    <NotAuthorized>
+        <Login />
+    </NotAuthorized>
+</AuthorizeView>
+
+

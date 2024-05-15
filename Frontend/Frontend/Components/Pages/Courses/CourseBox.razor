@@ -1,0 +1,60 @@
+﻿
+
+@code {
+    [Parameter]
+    public CourseViewModel Course { get; set; } = null!;
+    
+    [Inject] NavigationManager NavigationManager { get; set; }
+
+
+}
+
+
+<div class="course-box">
+
+@*     @if (!Course.IsSaved)
+    {
+        <a class="save-course-btn" >
+            <i class="fa-regular fa-bookmark"></i>
+        </a>
+    }
+    else if (Course.IsSaved)
+    {
+        <a class="save-course-btn">
+            <i class="fa-solid fa-bookmark"></i>
+        </a>
+    } *@
+
+    <a class="content-box" href="@($"course/{Course.Id}")">
+
+
+        <div class="img-div">
+            <img src="@Course.Image" />
+
+        </div>
+
+        <div class="text">
+
+            <h2 class="title h5">@Course.Name</h2>
+
+            <p class="author">By @Course.AuthorName</p>
+
+            <p class="price">$@Course.Price</p>
+
+        </div>
+
+        <div class="bottom">
+
+            <div class="item">
+                <p><i class="fa-regular fa-clock"></i>@Course.HoursToComplete hours</p>
+            </div>
+
+            <div class="item">
+                <p><i class="fa-regular fa-thumbs-up"></i>@Course.LikesPercentage % (@Course.LikesAmount K)</p>
+            </div>
+
+        </div>
+
+    </a>
+
+</div>

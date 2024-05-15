@@ -1,0 +1,71 @@
+﻿
+<header>
+    <div id="header-menu" class="container">
+
+            <AuthorizeView>
+                <Authorized>
+
+                    <a id="silicon-logo" href="/"><img id="silicon-logo-img" src="/images/silicone-logo-light_theme.svg" /></a>
+
+                    <div id="navigation" class="navigation hidden">
+                        <NavLink class="menu-link" href="/">Overview</NavLink>
+                        <NavLink class="menu-link" href="/courses">Courses</NavLink>
+                        <NavLink class="menu-link" href="/contact">Contact</NavLink>
+
+                        <NavLink id="details-link" class="menu-link" href="/account/details">Account Details</NavLink>
+                    </div>
+
+                    <div id="btn-switch" class="btn-switch hidden">
+                        <label>Light</label>
+                        <label class="switch" for="switch-mode">
+                            <a>
+                                <input type="checkbox" id="switch-mode" onclick="toggleDarkTheme()" />
+                                <div class="slider round"></div>
+                            </a>
+                        </label>
+                        <label>Dark</label>
+                    </div>
+
+                    <div id="account-buttons" class="account-buttons hidden">
+
+                    <a class="profile-thumb-a" id="profile-thumb-a" href="/account/details">
+                        @* MÅSTE FIXA SÅ ATT DET FINNS STANDARD PROFILBILD OM MAN INTE VALT EN, FÅR EJ VARA NULL!! *@
+                        <img src="/images/icons/no-profile-picture.svg" alt="" class="profile-thumb" />
+                    </a>
+
+                    </div>
+
+                </Authorized>
+
+
+                <NotAuthorized>
+                    <a id="silicon-logo" href="/"><img id="silicon-logo-img" src="/images/silicone-logo-light_theme.svg" /></a>
+
+                    <div id="navigation" class="navigation hidden">
+                        <NavLink class="menu-link" href="/">Overview</NavLink>
+                        <NavLink class="menu-link" href="/courses">Courses</NavLink>
+                        <NavLink class="menu-link" href="/contact">Contact</NavLink>
+                    </div>
+
+                    <div id="btn-switch" class="btn-switch hidden">
+                        <label>Light</label>
+                        <label class="switch" for="switch-mode">
+                            <a>
+                                <input type="checkbox" id="switch-mode" onclick="toggleDarkTheme()" />
+                                <div class="slider round"></div>
+                            </a>
+                        </label>
+                        <label>Dark</label>
+                    </div>
+
+                    <div id="account-buttons" class="account-buttons hidden">
+                        <a class="btn-gray" href="/signin"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
+                    <a class="btn-theme" href="/signup"><i class="fa-regular fa-user"></i> Sign Up</a>
+                    </div>
+                </NotAuthorized>
+            </AuthorizeView>
+
+        <button class="btn-mobile" onclick="toggleMenu()"><i id="btn-mobile-icon" class="fa-solid fa-bars"></i></button>
+    </div>
+
+</header>

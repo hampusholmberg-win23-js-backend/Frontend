@@ -1,0 +1,75 @@
+﻿@using Frontend.Data
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject NavigationManager NavigationManager
+@inject HttpClient http
+
+@attribute [StreamRendering]
+@rendermode InteractiveServer
+
+@if (user == null)
+{
+    <p>
+        loading...
+    </p>
+}
+else
+{
+    <div class="account-menu">
+        <div class="account-details">
+            <div class="img-div">
+                @* FIXA EN MODEL FÖR UPPLADDNING AV FILER  *@
+                @* <EditForm enctype="multipart/form-data" method="post" Model="@user" FormName="ProfielUpload" OnValidSubmit="HandleProfileUpload"> *@
+                <EditForm enctype="multipart/form-data" method="post" Model="@user" FormName="ProfielUpload">
+                    @* <InputFile id="fileUploader" onchange="HandleProfileUpload()" hidden /> *@
+                    <label for="fileUploader">
+                        <i class="fa-solid fa-arrows-rotate"></i>
+                    </label>
+                </EditForm>
+                <img src="@user.ProfileImage" alt="" />
+            </div>
+            <h5 class="user-name">@user.FirstName + @user.LastName</h5>
+            <p class="user-email">@user.Email</p>
+        </div>
+        <div class="account-nav">
+            <NavLink href="/account/details" class="account-nav-link"><i class="fa-solid fa-gear"></i>  Account Details</NavLink>
+            <NavLink href="/account/security" class="account-nav-link"><i class="fa-solid fa-lock"></i> Security</NavLink>
+            <NavLink href="/account/savedcourses" class="account-nav-link"><i class="fa-solid fa-bookmark"></i> Saved Courses</NavLink>
+
+
+            @* FUNKAR INTE  *@
+            <NavLink @onclick="HandleSignOut" class="account-nav-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</NavLink>
+        </div>
+    </div>
+}
+
+
+
+@code {
+    [Parameter]
+    public ApplicationUser user { get; set; } = null!;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private async Task HandleSignOut()
+    {
+        // FUNKAR EJ, FIXA
+        await SignInManager.SignOutAsync();
+        NavigationManager.NavigateTo("/");
+    }
+
+    // [CascadingParameter]
+    // private HttpContext HttpContext { get; set; } = default!;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+    // }
+
+    // public async Task HandleProfileUpload()
+    // {
+        
+    // }
+}
