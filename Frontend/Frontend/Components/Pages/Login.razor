@@ -21,8 +21,7 @@
 
             <h1>Welcome Back</h1>
 
-
-            <p>Don’t have an account yet? <a asp-action="SignUp" asp-controller="Auth">Sign up here.</a></p>
+            <p>Don’t have an account yet? <a href="/signup">Sign up here.</a></p>
 
             <EditForm Model="Input" asp-route-returnUrl="@ReturnUrl" method="post" OnValidSubmit="LoginUser" FormName="signin" novalidate id="sign-in-form">
             <DataAnnotationsValidator />

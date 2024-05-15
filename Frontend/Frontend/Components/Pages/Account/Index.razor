@@ -10,94 +10,107 @@
 
 <PageTitle>Profile</PageTitle>
 
-<section class="account-details">
 
-    <div class="container">
+<AuthorizeView Context="authContext">
+    <Authorized>
+        <section class="account-details">
 
-        <AccountMenu user="@user" />
+            <div class="container">
 
-        <div class="account-details-forms">
+                <AccountMenu user="@user" />
 
-            <h1 class="h3">Account Details</h1>
+                <div class="account-details-forms">
 
-            <p class="h4">Basic Info</p>
+                    <h1 class="h3">Account Details</h1>
 
-            <EditForm Model="user" method="post" FormName="UserContactInformation"  id="account-details-basic-info-form" OnValidSubmit="UpdateContactInformation" novalidate>
-                <DataAnnotationsValidator />
+                    <p class="h4">Basic Info</p>
 
-                <div class="input-div">
-                    <label for="@user.FirstName">First name</label>
-                    <InputText @bind-Value="user.FirstName" />
-                    <ValidationMessage For="() => user.FirstName" />
+                    <EditForm Model="user" method="post" FormName="UserContactInformation" id="account-details-basic-info-form" OnValidSubmit="UpdateContactInformation" novalidate>
+                        <DataAnnotationsValidator />
+
+                        <div class="input-div">
+                            <label for="@user.FirstName">First name</label>
+                            <InputText @bind-Value="user.FirstName" />
+                            <ValidationMessage For="() => user.FirstName" />
+                        </div>
+
+                        <div class="input-div">
+                            <label for="@user.LastName">Last name</label>
+                            <InputText @bind-Value="user.LastName" />
+                            <ValidationMessage For="() => user.LastName" />
+                        </div>
+
+                        <div class="input-div">
+                            <label for="@user.Email">Email</label>
+                            <InputText @bind-Value="user.Email" />
+                            <ValidationMessage For="() => user.Email" />
+                        </div>
+
+                        <div class="input-div">
+                            <label for="@user.PhoneNumber">Phone number</label>
+                            <InputText @bind-Value="user.PhoneNumber" />
+                            <ValidationMessage For="() => user.PhoneNumber" />
+                        </div>
+
+                        <div class="input-div">
+                            <label for="@user.Biography">Biography</label>
+                            <InputText @bind-Value="user.Biography" />
+                            <ValidationMessage For="() => user.Biography" />
+                        </div>
+
+                        <div class="buttons">
+                            <button class="btn-gray">Cancel</button>
+                            <button type="submit" class="btn-theme">Save Changes</button>
+                        </div>
+
+                    </EditForm>
+
+                    <p class="h4">Address</p>
+
+                    <EditForm Model="userAddress" method="post" FormName="UserAddressInformation" id="account-details-address-form" OnValidSubmit="UpdateAddressInformation" novalidate>
+
+                        <div class="input-div">
+                            <label for="@userAddress.AddressLine1">Street name</label>
+                            <InputText @bind-Value="userAddress.AddressLine1" />
+                            <ValidationMessage For="() => userAddress.AddressLine1" />
+                        </div>
+
+                        <div class="input-div">
+                            <label for="@userAddress.AddressLine2">c/o (optional)</label>
+                            <InputText @bind-Value="userAddress.AddressLine2" />
+                            <ValidationMessage For="() => userAddress.AddressLine2" />
+                        </div>
+
+                        <div class="input-div">
+                            <label for="@userAddress.PostalCode">Postal code</label>
+                            <InputText @bind-Value="userAddress.PostalCode" />
+                            <ValidationMessage For="() => userAddress.PostalCode" />
+                        </div>
+
+                        <div class="input-div bio-textarea">
+                            <label for="@userAddress.City">City</label>
+                            <InputText @bind-Value="userAddress.City" />
+                            <ValidationMessage For="() => userAddress.City" />
+                        </div>
+
+                        <div class="buttons">
+                            <button class="btn-gray">Cancel</button>
+                            <button type="submit" class="btn-theme">Save Changes</button>
+                        </div>
+                    </EditForm>
                 </div>
+            </div>
+        </section>
 
-                <div class="input-div">
-                    <label for="@user.LastName">Last name</label>
-                    <InputText @bind-Value="user.LastName" />
-                    <ValidationMessage For="() => user.LastName" />
-                </div>
+    </Authorized>
 
-                <div class="input-div">
-                    <label for="@user.Email">Email</label>
-                    <InputText @bind-Value="user.Email" />
-                    <ValidationMessage For="() => user.Email" />
-                </div>
+    <NotAuthorized>
+        <Login />
+    </NotAuthorized>
 
-                <div class="input-div">
-                    <label for="@user.PhoneNumber">Phone number</label>
-                    <InputText @bind-Value="user.PhoneNumber" />
-                    <ValidationMessage For="() => user.PhoneNumber" />
-                </div>
+</AuthorizeView>
 
-                <div class="input-div">
-                    <label for="@user.Biography">Biography</label>
-                    <InputText @bind-Value="user.Biography" />
-                    <ValidationMessage For="() => user.Biography" />
-                </div>
 
-                <div class="buttons">
-                    <button class="btn-gray">Cancel</button>
-                    <button type="submit" class="btn-theme">Save Changes</button>
-                </div>
-
-            </EditForm>
-
-            <p class="h4">Address</p>
-
-            <EditForm Model="userAddress" method="post" FormName="UserAddressInformation" id="account-details-address-form" OnValidSubmit="UpdateAddressInformation" novalidate>
-
-                <div class="input-div">
-                    <label for="@userAddress.AddressLine1">Street name</label>
-                    <InputText @bind-Value="userAddress.AddressLine1" />
-                    <ValidationMessage For="() => userAddress.AddressLine1" />
-                </div>
-
-                <div class="input-div">
-                    <label for="@userAddress.AddressLine2">c/o (optional)</label>
-                    <InputText @bind-Value="userAddress.AddressLine2" />
-                    <ValidationMessage For="() => userAddress.AddressLine2" />
-                </div>
-
-                <div class="input-div">
-                    <label for="@userAddress.PostalCode">Postal code</label>
-                    <InputText @bind-Value="userAddress.PostalCode" />
-                    <ValidationMessage For="() => userAddress.PostalCode" />
-                </div>
-
-                <div class="input-div bio-textarea">
-                    <label for="@userAddress.City">City</label>
-                    <InputText @bind-Value="userAddress.City" />
-                    <ValidationMessage For="() => userAddress.City" />
-                </div>
-
-                <div class="buttons">
-                    <button class="btn-gray">Cancel</button>
-                    <button type="submit" class="btn-theme">Save Changes</button>
-                </div>
-            </EditForm>
-        </div>
-    </div>
-</section>
 
 @code {
     private ApplicationUser user { get; set; } = new();
@@ -108,13 +121,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
-        try
+        var result = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+
+        if(result != null)
         {
-            if(user.Address != null) 
-                userAddress = user.Address!;
+            try
+            {
+                user = result;
+
+                if (user!.Address != null)
+                {
+                    userAddress = user.Address!;
+                }
+            }
+            catch { }
         }
-        catch{}
     }
 
     public async Task HandleProfileUpload()
