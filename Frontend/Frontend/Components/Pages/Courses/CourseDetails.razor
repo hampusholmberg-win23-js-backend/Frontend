@@ -1,8 +1,8 @@
 ﻿@page "/course/{id}"
-@using Frontend.Components.Pages.Courses
+@using Frontend.Components.Models
 
 @code {
-
+    [Parameter]
     public CourseViewModel Course { get; set; } = null!;
 }
 

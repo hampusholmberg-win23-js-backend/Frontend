@@ -29,7 +29,7 @@ else
                 </EditForm>
                 <img src="@user.ProfileImage" alt="" />
             </div>
-            <h5 class="user-name">@user.FirstName + @user.LastName</h5>
+            <h5 class="user-name">@user.FirstName @user.LastName</h5>
             <p class="user-email">@user.Email</p>
         </div>
         <div class="account-nav">
@@ -60,16 +60,8 @@ else
         NavigationManager.NavigateTo("/");
     }
 
-    // [CascadingParameter]
-    // private HttpContext HttpContext { get; set; } = default!;
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
-    // }
-
-    // public async Task HandleProfileUpload()
-    // {
-        
-    // }
+    public async Task HandleProfileUpload()
+    {
+        // var response = await http.PostAsync(Environment.GetEnvironmentVariable("Api_Fileprovider_Upload"), content);
+    }
 }

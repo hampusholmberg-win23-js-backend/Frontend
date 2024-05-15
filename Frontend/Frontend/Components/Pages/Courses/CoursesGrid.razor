@@ -10,7 +10,7 @@
     {
         try
         {
-            courses = await http.GetFromJsonAsync<CourseModel[]>("url till API här");
+            courses = await http.GetFromJsonAsync<CourseModel[]>(Environment.GetEnvironmentVariable("Api_CourseProvider_Read"));
         }
         catch (Exception ex) { }
     }
@@ -67,8 +67,6 @@
         public int AuthorYoutubeFollowersQty { get; set; }
         public int AuthorFacebookFollowersQty { get; set; }
     }
-
-
 }
 
 <section class="courses-grid">

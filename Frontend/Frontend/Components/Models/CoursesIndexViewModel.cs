@@ -1,9 +1,7 @@
 ﻿//using Infrastructure.Models;
 
 //using Infrastructure.Models;
-using Frontend.Components.Pages.Courses;
-
-namespace Frontend.Components.Pages.Courses;
+namespace Frontend.Components.Models;
 
 public class CoursesIndexViewModel
 {

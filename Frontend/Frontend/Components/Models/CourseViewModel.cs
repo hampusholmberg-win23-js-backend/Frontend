@@ -1,4 +1,4 @@
-﻿namespace Frontend.Components.Pages.Courses;
+﻿namespace Frontend.Components.Models;
 
 public class CourseViewModel
 {
