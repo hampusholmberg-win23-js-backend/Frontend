@@ -22,7 +22,7 @@
             width: 120px;
             border-radius: 60px;
             overflow: hidden;
-            display:flex;
+            display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 1rem;
@@ -36,7 +36,7 @@
                 position: absolute;
                 right: 105px;
                 top: 95px;
-                border:1px solid $gray-200;
+                border: 1px solid $gray-200;
                 background-color: $white;
 
                 i {
@@ -55,5 +55,16 @@
     }
 
     .account-nav {
+        .account-nav-link {
+            &:hover {
+                cursor: pointer;
+            }
+        }
+
+        .active {
+            color: $white;
+            background-color: $theme;
+
+        }
     }
 }

@@ -38,9 +38,6 @@ else
             <NavLink href="/account/details" class="account-nav-link"><i class="fa-solid fa-gear"></i>  Account Details</NavLink>
             <NavLink href="/account/security" class="account-nav-link"><i class="fa-solid fa-lock"></i> Security</NavLink>
             <NavLink href="/account/savedcourses" class="account-nav-link"><i class="fa-solid fa-bookmark"></i> Saved Courses</NavLink>
-
-
-            @* FUNKAR INTE  *@
             <NavLink @onclick="HandleSignOut" class="account-nav-link"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign Out</NavLink>
         </div>
     </div>
@@ -55,11 +52,9 @@ else
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
-    private async Task HandleSignOut()
+    private void HandleSignOut()
     {
-        // FUNKAR EJ, FIXA
-        await SignInManager.SignOutAsync();
-        NavigationManager.NavigateTo("/");
+        NavigationManager.NavigateTo("/signout");
     }
 
     public async Task HandleProfileUpload()

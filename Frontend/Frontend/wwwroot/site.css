@@ -1748,6 +1748,14 @@ footer .container .social-media {
 .account-menu .account-details .img-div label:hover {
   cursor: pointer;
 }
+.account-menu .account-nav .account-nav-link:hover {
+  cursor: pointer;
+}
+.account-menu .account-nav .active {
+  color: #FFFFFF;
+  background-color: #6366F1;
+}
+
 .account-security .btn-theme {
   min-width: 175px;
 }
