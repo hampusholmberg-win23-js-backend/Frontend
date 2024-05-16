@@ -6,6 +6,7 @@
 
 @attribute [StreamRendering]
 @inject HttpClient http
+@inject IConfiguration config
 
 @code {
     [Parameter] 
@@ -21,9 +22,8 @@
         courseRequest.Id = Id;
 
         var stringContent = new StringContent((JsonConvert.SerializeObject(courseRequest)), Encoding.UTF8, "application/json");
-
-        var response = await http.PostAsync("http://localhost:7250/api/GetOneCourse", stringContent);
-
+        
+        var response = await http.PostAsync(config["Api_CourseProvider_ReadOne"], stringContent);
         var responseContent = await response.Content.ReadAsStringAsync();
 
         if (responseContent != null)
