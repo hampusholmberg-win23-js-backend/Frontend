@@ -1,0 +1,74 @@
+﻿@using Frontend.Components.Models
+@code {
+    NewsletterModel Model = new NewsletterModel();
+
+    void SubscribeToNewsletter()
+    {
+    }
+}
+<section class="newsletter">
+
+    <div class="container">
+
+        <div class="head">
+
+            <h2 class="h1">
+                Don't Want to Miss Anything?<i><img src="/images/homepage-arrows.png" /></i>
+            </h2>
+
+        </div>
+
+        <EditForm Model="@Model" OnValidSubmit="SubscribeToNewsletter">
+            <div class="mid">
+                <p class="h5">Sign up for<br /> Newsletters</p>
+
+                <div class="checkboxes">
+                    <div class="checkbox">
+                        <input type="checkbox" @bind="@Model.DailyNewsletter" id="checkbox-daily-newsletter" />
+                        <label for="checkbox-daily-newsletter">Daily Newsletter</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" @bind="@Model.AdvertisingUpdates" id="checkbox-advertising-updates" />
+                        <label for="checkbox-advertising-updates">Advertising Updates</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" @bind="@Model.WeekInReview" id="checkbox-week-in-review" />
+                        <label for="checkbox-week-in-review">Week in Review</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" @bind="@Model.EventUpdates" id="checkbox-event-updates" />
+                        <label for="checkbox-event-updates">Event Updates</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" @bind="@Model.StartupsWeekly" id="checkbox-startups-weekly" />
+                        <label for="checkbox-startups-weekly">Startups Weekly</label>
+                    </div>
+
+                    <div class="checkbox">
+                        <input type="checkbox" @bind="@Model.Podcasts" id="checkbox-podcasts" />
+                        <label for="checkbox-podcasts">Podcasts</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom">
+                <div class="email-signup">
+                    <div class="registration">
+                        <div class="email-input">
+                            <i class="fa-regular fa-envelope"></i>
+                            <InputText @bind-Value="@Model.Email" id="email-input-newsletter" class="placeholder-icon" />
+                        </div>
+                        <p class="text-xs">* Yes, I agree to the terms and privacy policy.</p>
+                    </div>
+                    <button type="submit" class="btn-theme">Subscribe</button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+
+</section>
+

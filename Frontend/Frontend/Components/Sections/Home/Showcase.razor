@@ -1,0 +1,51 @@
+﻿@using Frontend.Components.Models
+
+@code {
+
+    ShowcaseViewModel Model = new ShowcaseViewModel
+    {
+        Id = "Showcase",
+        ShowcaseImage = new ImageViewModel { ImageUrl = "/images/showcase/showcase-taskmaster.png", AltText = "Showcase image", },
+        Title = "Task Management Assistant You're Gonna Love",
+        Text = "We offer you a new generation of task management system. Plan, manage & track all your tasks in one flexible tool.",
+
+        BrandsText = "Largest companies use our tool to work efficiently",
+        BrandImages = new List<ImageViewModel>
+            {
+                new() { ImageUrl = "/images/showcase/logoipsum1.svg", AltText = "Logotype for a brand that uses our services." },
+                new() { ImageUrl = "/images/showcase/logoipsum2.svg", AltText = "Logotype for a brand that uses our services." },
+                new() { ImageUrl = "/images/showcase/logoipsum3.svg", AltText = "Logotype for a brand that uses our services." },
+                new() { ImageUrl = "/images/showcase/logoipsum4.svg", AltText = "Logotype for a brand that uses our services." },
+            },
+
+        Link = new() { ControllerName = "", ActionName = "", Text = "Get started for free" }
+
+    };
+
+}
+
+<section class="showcase">
+    <div id="@Model.Id" class="container">
+
+        <div class="img-div">
+            <img class="background-image" src="@Model.ShowcaseImage.ImageUrl" alt="@Model.ShowcaseImage.AltText" />
+        </div>
+
+        <div class="content">
+            <h1>@Model.Title</h1>
+            <p>@Model.Text</p>
+            <a class="btn-theme-s" >@Model.Link.Text</a>
+            <h6>@Model.BrandsText</h6>
+
+            <div class="brands">
+                @if (Model.BrandImages != null)
+                {
+                    foreach (var brand in Model.BrandImages)
+                    {
+                        <img src="@brand.ImageUrl" alt="@brand.AltText" />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</section>
