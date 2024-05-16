@@ -4,10 +4,12 @@
 @using Microsoft.AspNetCore.Authentication
 @using Microsoft.AspNetCore.Identity
 @using Frontend.Data
+@using Newtonsoft.Json
 
 @inject SignInManager<ApplicationUser> SignInManager
 @inject ILogger<Login> Logger
 @inject NavigationManager NavigationManager
+@inject HttpClient http
 
 <PageTitle>Log in</PageTitle>
 
@@ -93,6 +95,9 @@
         var result = await SignInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
         if (result.Succeeded)
         {
+
+
+
             NavigationManager.NavigateTo(ReturnUrl ?? "/account/details");
         }
         else

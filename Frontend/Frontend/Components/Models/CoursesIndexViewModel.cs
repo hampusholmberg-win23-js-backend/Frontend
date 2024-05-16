@@ -6,7 +6,7 @@ namespace Frontend.Components.Models;
 public class CoursesIndexViewModel
 {
     public string Title { get; set; } = "";
-    public List<CourseViewModel> Courses { get; set; } = null!;
+    public List<CourseModel> Courses { get; set; } = null!;
     //public IEnumerable<CategoryViewModel> Categories { get; set; } = null!;
     //public AccountViewModel Account { get; set; } = null!;
     //public Pagination? Pagination { get; set; }
