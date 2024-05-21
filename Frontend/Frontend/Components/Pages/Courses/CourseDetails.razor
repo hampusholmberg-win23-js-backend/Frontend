@@ -1,6 +1,8 @@
 ﻿@page "/course/{id}"
 @using CourseProvider.RequestModels
 @using Frontend.Components.Models
+@using Frontend.Components.Models.GraphQL
+@using Frontend.Components.Pages.Courses.CourseDetailsComponents
 @using Newtonsoft.Json
 @using System.Text
 
@@ -14,29 +16,33 @@
 
     private CourseModel course { get; set; } = null!;
 
-    private CourseRequest courseRequest = new CourseRequest();
-
-
     protected override async Task OnInitializedAsync()
     {
-        courseRequest.Id = Id;
+        int queryId = Convert.ToInt32(Id);
 
-        var stringContent = new StringContent((JsonConvert.SerializeObject(courseRequest)), Encoding.UTF8, "application/json");
-        
-        var response = await http.PostAsync(config["Api_CourseProvider_ReadOne"], stringContent);
-        var responseContent = await response.Content.ReadAsStringAsync();
-
-        if (responseContent != null)
+        var query = new GraphQLQuery
         {
-            course = JsonConvert.DeserializeObject<CourseModel>(responseContent)!;
-        }
+            Query = "query($id: Int!) { GetCourseById(id: $id) { id name description ingress price hoursToComplete likesPercentage likesAmount image authorName authorDescription authorImage authorYoutubeFollowersQty authorFacebookFollowersQty } }",
+            Variables = new Variables
+            {
+                Id = queryId
+            }
+        };
+
+        var response = await http.PostAsJsonAsync(config["Api_CourseProvider_GraphQL"], query);
+
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        var rootObject = JsonConvert.DeserializeObject<DynamicGraphQLResponse>(responseString);
+
+        course = rootObject.Data.GetCourseById;
     }
 }
 
-<section class="course-content">
+@if (course == null)
+{
+    <section class="course-content">
 
-    @if (course == null)
-    {
         <div class="container">
             <div class="spinners">
                 <div class="spinner-grow text-primary" role="status">
@@ -50,57 +56,14 @@
                 </div>
             </div>
         </div>
-    }
-    else
-    {
-        <div class="container">
 
-            <div class="course-inclusion">
-                <h3>This course includes:</h3>
-                <p><i class="fa-solid fa-video"></i> @course.HoursToComplete hours on-demand video</p>
-                <p><i class="fa-solid fa-file-lines"></i> 18 articles</p>
-                <p><i class="fa-solid fa-download"></i> 25 downloadable resources</p>
-                <p><i class="fa-solid fa-infinity"></i> Full lifetime access</p>
-                <p><i class="fa-solid fa-trophy"></i> Certificate of completion</p>
+    </section>
+}
+else
+{
+    <CourseShowcase Course="@course" />
 
-                <p class="course-price">$ @course.Price</p>
+    <CourseContent Course="@course" />
 
-                <button class="btn-theme">Join course</button>
-            </div>
-
-            <div class="course-description">
-                <h2>Course Description</h2>
-                <p>@course.Description</p>
-            </div>
-
-            <div class="bullets">
-                <h3>What you'll learn</h3>
-
-                <div class="bullet">
-                    <p><i class="fa-regular fa-circle-check"></i> Sed lectus donec amet eu turpis interdum.</p>
-                </div>
-
-                <div class="bullet">
-                    <p><i class="fa-regular fa-circle-check"></i> Nulla at consectetur vitae dignissim porttitor.</p>
-                </div>
-
-                <div class="bullet">
-                    <p><i class="fa-regular fa-circle-check"></i> Phasellus id vitae dui aliquet mi.</p>
-                </div>
-
-                <div class="bullet">
-                    <p><i class="fa-regular fa-circle-check"></i> Integer cursus vitae, odio feugiat iaculis aliquet diam, et purus.</p>
-                </div>
-
-                <div class="bullet">
-                    <p><i class="fa-regular fa-circle-check"></i> In aenean dolor diam tortor orci eu.</p>
-                </div>
-
-            </div>
-
-            <div class="course-program-details">
-            </div>
-
-        </div>
-    }
-</section>
+    <CourseAuthor Course="@course" />
+}

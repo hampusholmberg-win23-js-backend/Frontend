@@ -1,33 +1,56 @@
 ﻿@page "/account/notifications"
 
 @using System.ComponentModel.DataAnnotations
+@using Frontend.Components.Models.Requests
 @using Frontend.Components.Sections
 @using Microsoft.AspNetCore.Identity
 @using Frontend.Data
+@using Newtonsoft.Json
+@using System.Text
 
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
+@inject HttpClient http
+@inject IConfiguration config
 
 <PageTitle>Profile - Notifications</PageTitle>
 
-<section class="account-details">
+<AuthorizeView Context="authContext">
+    <Authorized>
+        <section class="account-notifications">
 
-    <div class="container">
+            <div class="container">
 
-        <AccountMenu user="@user" />
+                <AccountMenu user="@user" />
 
-        <div class="account-details-forms">
+                <div class="account-details-forms">
 
-            <h1 class="h3">Account Notifications</h1>
+                    <h1 class="h3">Account Notifications</h1>
 
-            <p class="h4">Basic Info</p>
+                    <p class="h4">Basic Info</p>
 
-            <EditForm Model="user" method="post" FormName="UserContactInformation" id="account-details-basic-info-form" OnValidSubmit="ToggleNewsletter" novalidate>
-                <DataAnnotationsValidator />
-            </EditForm>
-        </div>
-    </div>
-</section>
+                    <EditForm Model="user" method="post" FormName="SubscribeToNewsletter" id="account-details-basic-info-form" OnValidSubmit="Subscribe" novalidate >
+
+                        <InputText readonly @bind-Value="user.Email" />
+                        <button type="submit" class="btn-theme">Subscribe</button>
+                    </EditForm>
+
+                    <EditForm Model="user" method="post" FormName="UnsubscribeFromNewsletter" id="account-details-basic-info-form" OnValidSubmit="Unsubscribe" novalidate>
+
+                        <InputText readonly @bind-Value="user.Email" />
+                        <button type="submit" class="btn-theme">Unsubscribe</button>
+                    </EditForm>
+
+                </div>
+            </div>
+        </section>
+    </Authorized>
+
+    <NotAuthorized>
+        <Login />
+    </NotAuthorized>
+</AuthorizeView>
+
 
 @code {
     private ApplicationUser user { get; set; } = new();
@@ -38,18 +61,45 @@
 
     protected override async Task OnInitializedAsync()
     {
-        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
-        try
+        var result = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+
+        if (result != null)
         {
-            if (user.Address != null)
-                userAddress = user.Address!;
+            try
+            {
+                user = result;
+            }
+            catch { }
         }
-        catch { }
     }
 
-    private async Task ToggleNewsletter()
+    private async Task Subscribe()
     {
-        
+
+        NewsletterRequest request = new NewsletterRequest
+        {
+            Email = user.Email!,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+        var response = await http.PostAsync(config["Api_NewsletterProvider_Create"], content);
     }
 
+    private async Task Unsubscribe()
+    {
+        NewsletterRequest request = new NewsletterRequest
+        {
+            Email = user.Email!,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+        var response = await http.PostAsync(config["Api_NewsletterProvider_Delete"], content);        
+        // var response = await http.PostAsync("http://localhost:7187/api/RemoveFromNewsletter", content);
+    }
 }

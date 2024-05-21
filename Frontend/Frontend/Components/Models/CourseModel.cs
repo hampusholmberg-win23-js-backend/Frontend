@@ -3,9 +3,9 @@
 public class CourseModel
 {
     public int Id { get; set; }
-    public string Name { get; set; } = null!;
-    public string Description { get; set; } = null!;
-    public string Ingress { get; set; } = null!;
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+    public string? Ingress { get; set; }
     public decimal Price { get; set; }
     public int HoursToComplete { get; set; }
     public int LikesPercentage { get; set; }
@@ -15,7 +15,7 @@ public class CourseModel
 
     public string? AuthorName { get; set; }
     public string? AuthorDescription { get; set; }
-    public string? AuthorImage { get; set; } = "/images/icons/no-profile-picture.svg";
+    public string? AuthorImage { get; set; }
 
 
     public int AuthorYoutubeFollowersQty { get; set; }

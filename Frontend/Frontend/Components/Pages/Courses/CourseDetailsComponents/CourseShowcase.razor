@@ -1,0 +1,37 @@
+﻿@using Frontend.Components.Models
+
+@code {
+    [Parameter]
+    public CourseModel Course { get; set; } = null!;
+}
+
+<section class="course-showcase">
+
+    <img class="background-image" src="@Course.Image"  />
+
+    <div class="container">
+
+        <div class="breadcrumbs"></div>
+
+        <div class="details">
+            <div class="tags"></div>
+
+            <h1>@Course.Name</h1>
+            <p>@Course.Ingress</p>
+
+            <div class="reviews">
+                <p><i class="fa-regular fa-thumbs-up"></i> @Course.LikesPercentage % (@Course.LikesAmount K)</p>
+                <p><i class="fa-regular fa-clock"></i> @Course.HoursToComplete hours</p>
+            </div>
+
+        </div>
+
+        <div class="author-thumb">
+            <img class="author-img" src="@Course.AuthorImage" />
+            <p>Created by</p>
+            <p>@Course.AuthorName</p>
+        </div>
+
+    </div>
+
+</section>
