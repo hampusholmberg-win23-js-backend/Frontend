@@ -708,10 +708,41 @@ label {
   #account-details-basic-info-form {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: "firstname lastname" "email phone" "bio bio" "buttons e";
+    grid-template-areas: "firstname lastname" "email phone" "bio bio" "address address" "streetname co" "postalcode city" "buttons e";
+  }
+  #account-details-basic-info-form .input-div {
+    margin-bottom: 1rem;
+  }
+  #account-details-basic-info-form .input-div:nth-child(2) {
+    grid-area: firstname;
+  }
+  #account-details-basic-info-form .input-div:nth-child(3) {
+    grid-area: lastname;
+  }
+  #account-details-basic-info-form .input-div:nth-child(4) {
+    grid-area: email;
   }
   #account-details-basic-info-form .input-div:nth-child(5) {
+    grid-area: phone;
+  }
+  #account-details-basic-info-form .input-div:nth-child(6) {
     grid-area: bio;
+  }
+  #account-details-basic-info-form .input-div:nth-child(7) {
+    grid-area: address;
+  }
+  #account-details-basic-info-form .input-div:nth-child(8) {
+    grid-area: streetname;
+  }
+  #account-details-basic-info-form .input-div:nth-child(9) {
+    grid-area: co;
+  }
+  #account-details-basic-info-form .input-div:nth-child(10) {
+    grid-area: postalcode;
+    padding-bottom: 1rem;
+  }
+  #account-details-basic-info-form .input-div:nth-child(11) {
+    grid-area: city;
   }
   #account-details-basic-info-form .buttons {
     grid-area: buttons;

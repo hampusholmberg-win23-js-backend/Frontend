@@ -4,103 +4,25 @@
 @using Frontend.Components.Sections
 @using Microsoft.AspNetCore.Identity
 @using Frontend.Data
+@using Microsoft.EntityFrameworkCore
+
+@attribute [StreamRendering]
+
+@* @rendermode InteractiveServer  *@
 
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
+@inject IJSRuntime JSRuntime
+
 
 <PageTitle>Profile</PageTitle>
 
 
 <AuthorizeView Context="authContext">
     <Authorized>
-        <section class="account-details">
 
-            <div class="container">
 
-                <AccountMenu user="@user" />
-
-                <div class="account-details-forms">
-
-                    <h1 class="h3">Account Details</h1>
-
-                    <p class="h4">Basic Info</p>
-
-                    <EditForm Model="user" method="post" FormName="UserContactInformation" id="account-details-basic-info-form" OnValidSubmit="UpdateContactInformation" novalidate>
-                        <DataAnnotationsValidator />
-
-                        <div class="input-div">
-                            <label for="@user.FirstName">First name</label>
-                            <InputText @bind-Value="user.FirstName" />
-                            <ValidationMessage For="() => user.FirstName" />
-                        </div>
-
-                        <div class="input-div">
-                            <label for="@user.LastName">Last name</label>
-                            <InputText @bind-Value="user.LastName" />
-                            <ValidationMessage For="() => user.LastName" />
-                        </div>
-
-                        <div class="input-div">
-                            <label for="@user.Email">Email</label>
-                            <InputText @bind-Value="user.Email" />
-                            <ValidationMessage For="() => user.Email" />
-                        </div>
-
-                        <div class="input-div">
-                            <label for="@user.PhoneNumber">Phone number</label>
-                            <InputText @bind-Value="user.PhoneNumber" />
-                            <ValidationMessage For="() => user.PhoneNumber" />
-                        </div>
-
-                        <div class="input-div">
-                            <label for="@user.Biography">Biography</label>
-                            <InputText @bind-Value="user.Biography" />
-                            <ValidationMessage For="() => user.Biography" />
-                        </div>
-
-                        <div class="buttons">
-                            <button class="btn-gray">Cancel</button>
-                            <button type="submit" class="btn-theme">Save Changes</button>
-                        </div>
-
-                    </EditForm>
-
-                    <p class="h4">Address</p>
-
-                    <EditForm Model="userAddress" method="post" FormName="UserAddressInformation" id="account-details-address-form" OnValidSubmit="UpdateAddressInformation" novalidate>
-
-                        <div class="input-div">
-                            <label for="@userAddress.AddressLine1">Street name</label>
-                            <InputText @bind-Value="userAddress.AddressLine1" />
-                            <ValidationMessage For="() => userAddress.AddressLine1" />
-                        </div>
-
-                        <div class="input-div">
-                            <label for="@userAddress.AddressLine2">c/o (optional)</label>
-                            <InputText @bind-Value="userAddress.AddressLine2" />
-                            <ValidationMessage For="() => userAddress.AddressLine2" />
-                        </div>
-
-                        <div class="input-div">
-                            <label for="@userAddress.PostalCode">Postal code</label>
-                            <InputText @bind-Value="userAddress.PostalCode" />
-                            <ValidationMessage For="() => userAddress.PostalCode" />
-                        </div>
-
-                        <div class="input-div bio-textarea">
-                            <label for="@userAddress.City">City</label>
-                            <InputText @bind-Value="userAddress.City" />
-                            <ValidationMessage For="() => userAddress.City" />
-                        </div>
-
-                        <div class="buttons">
-                            <button class="btn-gray">Cancel</button>
-                            <button type="submit" class="btn-theme">Save Changes</button>
-                        </div>
-                    </EditForm>
-                </div>
-            </div>
-        </section>
+        <AccountForm user="@user"/>
 
     </Authorized>
 
@@ -113,83 +35,26 @@
 
 
 @code {
-    //  [SupplyParametersFromForm(FormName= "ditt formulärs namn")]   EFTERSOM DU HAR MER ÄN ETT FORMULÄR
     private ApplicationUser user { get; set; } = new();
-    private AddressEntity userAddress { get; set; } = new();
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
     protected override async Task OnInitializedAsync()
     {
-        var result = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
 
-        if(result != null)
-        {
-            try
-            {
-                user = result;
-
-                if (user!.Address != null)
-                {
-                    userAddress = user.Address!;
-                }
-            }
-            catch { }
-        }
     }
 
     public async Task HandleProfileUpload()
     {
-
+        Console.WriteLine();
+        Console.WriteLine();
     }
+
     public async Task UpdateContactInformation()
     {
-        
+        Console.WriteLine();
+        Console.WriteLine();
     }
-    public async Task UpdateAddressInformation()
-    {
-        
-    }
-
-
-    // private ApplicationUser user = default!;
-    // private string? username;
-    // private string? phoneNumber;
-
-    // [CascadingParameter]
-    // private HttpContext HttpContext { get; set; } = default!;
-
-    // [SupplyParameterFromForm]
-    // private InputModel Input { get; set; } = new();
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
-    //     username = await UserManager.GetUserNameAsync(user);
-    //     phoneNumber = await UserManager.GetPhoneNumberAsync(user);
-
-    //     Input.PhoneNumber ??= phoneNumber;
-    // }
-
-    // private async Task OnValidSubmitAsync()
-    // {
-    //     if (Input.PhoneNumber != phoneNumber)
-    //     {
-    //         var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-    //         if (!setPhoneResult.Succeeded)
-    //         {
-                
-    //         }
-    //     }
-
-    //     await SignInManager.RefreshSignInAsync(user);
-    // }
-
-    // private sealed class InputModel
-    // {
-    //     [Phone]
-    //     [Display(Name = "Phone number")]
-    //     public string? PhoneNumber { get; set; }
-    // }
 }

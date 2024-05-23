@@ -12,7 +12,7 @@ public class ApplicationUser : IdentityUser
     public bool NewsletterSubscriber { get; set; } = true;
 
     public int? AddressId { get; set; }
-    public AddressEntity? Address { get; set; }
+    public  AddressEntity? Address { get; set; }
 }
 
 public class AddressEntity
