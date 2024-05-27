@@ -86,6 +86,12 @@
         var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
         var response = await http.PostAsync(config["Api_NewsletterProvider_Create"], content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            user.NewsletterSubscriber = true;
+            var result = await UserManager.UpdateAsync(user);
+        }
     }
 
     private async Task Unsubscribe()
@@ -99,7 +105,12 @@
 
         var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
 
-        var response = await http.PostAsync(config["Api_NewsletterProvider_Delete"], content);        
-        // var response = await http.PostAsync("http://localhost:7187/api/RemoveFromNewsletter", content);
+        var response = await http.PostAsync(config["Api_NewsletterProvider_Delete"], content);
+
+        if (response.IsSuccessStatusCode)
+        {
+            user.NewsletterSubscriber = false;
+            var result = await UserManager.UpdateAsync(user);
+        }
     }
 }
