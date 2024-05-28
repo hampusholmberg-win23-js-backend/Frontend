@@ -773,14 +773,19 @@ label {
 .account-notifications .container .account-notifications-forms {
   display: flex;
   flex-direction: column;
-  align-self: start;
+  margin-top: 4rem;
+}
+@media (min-width: 992px) {
+  .account-notifications .container .account-notifications-forms {
+    align-self: start;
+    margin-top: 0;
+  }
 }
 .account-notifications .container .account-notifications-forms input {
   max-width: 420px;
   margin-bottom: 2rem;
 }
 .account-notifications .container .account-notifications-forms p {
-  color: #6366F1;
   font-weight: 700;
 }
 .account-notifications .container .account-notifications-forms .input-div {

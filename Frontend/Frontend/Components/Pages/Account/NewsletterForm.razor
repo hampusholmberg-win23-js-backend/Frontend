@@ -1,0 +1,126 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using Frontend.Components.Models.Requests
+@using Frontend.Components.Sections
+@using Microsoft.AspNetCore.Identity
+@using Frontend.Data
+@using Newtonsoft.Json
+@using System.Text
+@using System.Net
+
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
+@inject HttpClient http
+@inject IConfiguration config
+
+@rendermode InteractiveServer
+
+<div class="account-notifications-forms">
+
+    <h1 class="h3 mb-3">Account Notifications</h1>
+
+    @if (!string.IsNullOrEmpty(SuccessMessage))
+    {
+        <p class="success-flag">@SuccessMessage</p>
+    }
+    @if (!string.IsNullOrEmpty(ErrorMessage))
+    {
+        <p class="error-flag">@ErrorMessage</p>
+    }
+
+    <EditForm Model="user" method="post" FormName="SubscribeToNewsletter" id="account-details-basic-info-form" OnValidSubmit="ToggleSubscription" novalidate >
+
+        <InputText readonly @bind-Value="user.Email" hidden />
+
+        @if (user.NewsletterSubscriber)
+        {
+            <button type="submit" class="btn-delete">Unsubscribe</button>
+        }
+        else
+        {
+            <button type="submit" class="btn-theme">Subscribe</button>
+        }
+
+    </EditForm>
+
+</div>
+
+
+@code {
+    [Parameter]
+    public ApplicationUser user { get; set; } = new();
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    private string? ErrorMessage { get; set; }
+    private string? SuccessMessage { get; set; }
+
+    private async Task Subscribe()
+    {
+
+        NewsletterRequest request = new NewsletterRequest
+        {
+            Email = user.Email!,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+        var response = await http.PostAsJsonAsync(config["Api_NewsletterProvider_Create"], user);
+
+        if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.Conflict)
+        {
+            user.NewsletterSubscriber = true;
+            var result = await http.PostAsJsonAsync(config["Api_AccountProvider_Update"], user);
+
+            SuccessMessage = "You have successfully been subscribed";
+            ErrorMessage = null;
+        }
+        else
+        {
+            SuccessMessage = null;
+            ErrorMessage = "Something went wrong, you have not been subscribed";
+        }
+    }
+
+    private async Task Unsubscribe()
+    {
+        NewsletterRequest request = new NewsletterRequest
+        {
+            Email = user.Email!,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+        };
+
+        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+
+        var response = await http.PostAsync(config["Api_NewsletterProvider_Delete"], content);
+
+        if (response.IsSuccessStatusCode || response.StatusCode == HttpStatusCode.NotFound)
+        {
+            user.NewsletterSubscriber = false;
+            var result = await http.PostAsJsonAsync(config["Api_AccountProvider_Update"], user);
+
+            SuccessMessage = "You have successfully been unsubscribed";
+            ErrorMessage = null;
+        }
+        else
+        {
+            SuccessMessage = null;
+            ErrorMessage = "Something went wrong, you have not been unsubscribed";
+        }
+    }
+
+    private async Task ToggleSubscription()
+    {
+        if (user.NewsletterSubscriber)
+        {
+            await Unsubscribe();
+        }
+        else
+        {
+            await Subscribe();
+        }
+    }
+}

@@ -23,25 +23,8 @@
 
                 <AccountMenu user="@user" />
 
-                <div class="account-details-forms">
+                <NewsletterForm user="@user" />                
 
-                    <h1 class="h3">Account Notifications</h1>
-
-                    <p class="h4">Basic Info</p>
-
-                    <EditForm Model="user" method="post" FormName="SubscribeToNewsletter" id="account-details-basic-info-form" OnValidSubmit="Subscribe" novalidate >
-
-                        <InputText readonly @bind-Value="user.Email" />
-                        <button type="submit" class="btn-theme">Subscribe</button>
-                    </EditForm>
-
-                    <EditForm Model="user" method="post" FormName="UnsubscribeFromNewsletter" id="account-details-basic-info-form" OnValidSubmit="Unsubscribe" novalidate>
-
-                        <InputText readonly @bind-Value="user.Email" />
-                        <button type="submit" class="btn-theme">Unsubscribe</button>
-                    </EditForm>
-
-                </div>
             </div>
         </section>
     </Authorized>
@@ -51,10 +34,8 @@
     </NotAuthorized>
 </AuthorizeView>
 
-
 @code {
     private ApplicationUser user { get; set; } = new();
-    private AddressEntity userAddress { get; set; } = new();
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
@@ -70,47 +51,6 @@
                 user = result;
             }
             catch { }
-        }
-    }
-
-    private async Task Subscribe()
-    {
-
-        NewsletterRequest request = new NewsletterRequest
-        {
-            Email = user.Email!,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-        };
-
-        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-
-        var response = await http.PostAsync(config["Api_NewsletterProvider_Create"], content);
-
-        if (response.IsSuccessStatusCode)
-        {
-            user.NewsletterSubscriber = true;
-            var result = await UserManager.UpdateAsync(user);
-        }
-    }
-
-    private async Task Unsubscribe()
-    {
-        NewsletterRequest request = new NewsletterRequest
-        {
-            Email = user.Email!,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-        };
-
-        var content = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-
-        var response = await http.PostAsync(config["Api_NewsletterProvider_Delete"], content);
-
-        if (response.IsSuccessStatusCode)
-        {
-            user.NewsletterSubscriber = false;
-            var result = await UserManager.UpdateAsync(user);
         }
     }
 }
