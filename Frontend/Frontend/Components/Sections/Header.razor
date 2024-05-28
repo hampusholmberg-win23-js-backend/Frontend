@@ -1,20 +1,20 @@
-﻿
+﻿@rendermode InteractiveServer
+
 <header>
-    <div id="header-menu" class="container">
+    <div id="header-menu " class="container @(isMenuVisible ? "mobile-toggled" : "")">
 
             <AuthorizeView>
                 <Authorized>
-
                     <a id="silicon-logo" href="/"><img id="silicon-logo-img" src="/images/silicone-logo-light_theme.svg" /></a>
 
-                    <div id="navigation" class="navigation hidden">
+                    <div id="navigation" class="navigation @(isMenuVisible ? "" : "hidden")">
                         <NavLink class="menu-link" href="/">Overview</NavLink>
                         <NavLink class="menu-link" href="/courses">Courses</NavLink>
                         <NavLink class="menu-link" href="/contact">Contact</NavLink>
                         <NavLink id="details-link" class="menu-link" href="/account/details">Account Details</NavLink>
                     </div>
 
-                    <div id="btn-switch" class="btn-switch hidden">
+                <div id="btn-switch" class="btn-switch @(isMenuVisible ? "" : "hidden")">
                         <label>Light</label>
                         <label class="switch" for="switch-mode">
                             <a>
@@ -25,11 +25,11 @@
                         <label>Dark</label>
                     </div>
 
-                    <div id="account-buttons" class="account-buttons hidden">
+                <div id="account-buttons" class="account-buttons @(isMenuVisible ? "" : "hidden")">
 
                     <a class="profile-thumb-a" id="profile-thumb-a" href="/account/details">
 
-                        @* HAR EJ LÖST POOLED DB CONTEXT PROBLEMET *@
+                        @* HAR EJ LÖST POOLED DB CONTEXT PROBLEMET. HÄMTA ANVÄNDARE MED API?? *@
                         @* <img src="/images/icons/no-profile-picture.svg" alt="" class="profile-thumb" /> *@
 
                         <div class="profile-thumb">
@@ -46,13 +46,14 @@
                 <NotAuthorized>
                     <a id="silicon-logo" href="/"><img id="silicon-logo-img" src="/images/silicone-logo-light_theme.svg" /></a>
 
-                    <div id="navigation" class="navigation hidden">
+                    <div id="navigation" class="navigation @(isMenuVisible ? "" : "hidden")" >
                         <NavLink class="menu-link" href="/">Overview</NavLink>
                         <NavLink class="menu-link" href="/courses">Courses</NavLink>
                         <NavLink class="menu-link" href="/contact">Contact</NavLink>
+                        <NavLink id="details-link" class="menu-link" href="/account/details">Account Details</NavLink>
                     </div>
 
-                    <div id="btn-switch" class="btn-switch hidden">
+                <div id="btn-switch" class="btn-switch @(isMenuVisible ? "" : "hidden")" >
                         <label>Light</label>
                         <label class="switch" for="switch-mode">
                             <a>
@@ -63,14 +64,78 @@
                         <label>Dark</label>
                     </div>
 
-                    <div id="account-buttons" class="account-buttons hidden">
-                        <a class="btn-gray" href="/signin"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
+                <div id="account-buttons" class="account-buttons @(isMenuVisible ? "" : "hidden")">
+                    <a class="btn-gray" href="/signin"><i class="fa-solid fa-arrow-right-to-bracket"></i> Sign In</a>
                     <a class="btn-theme" href="/signup"><i class="fa-regular fa-user"></i> Sign Up</a>
-                    </div>
+                </div>
                 </NotAuthorized>
             </AuthorizeView>
 
-        <button class="btn-mobile" onclick="toggleMenu()"><i id="btn-mobile-icon" class="fa-solid fa-bars"></i></button>
+        <button class="btn-mobile" @onclick="ToggleMenu">
+            <i id="btn-mobile-icon" class="fa-solid @(isMobileMenuVisible ? "fa-x" : "fa-bars")"></i>
+        </button>
     </div>
 
 </header>
+
+@code {
+    private bool isMenuVisible = false;
+    private bool isMobileMenuVisible = false;
+
+    [Inject] private IJSRuntime JS { get; set; }
+    [Inject] private NavigationManager Navigation { get; set; }
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        isMenuVisible = false;  
+        isMobileMenuVisible = false;
+    }
+
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("resizeHandler.checkScreenSize", DotNetObjectReference.Create(this));
+            Navigation.LocationChanged += OnLocationChanged;
+        }
+    }
+
+    private void OnLocationChanged(object sender, LocationChangedEventArgs e)
+    {
+        if (isMenuVisible || isMobileMenuVisible)
+        {
+            CloseMenu();
+        }
+    }
+
+    [JSInvokable]
+    public void CheckScreenSize(int windowWidth)
+    {
+        if (isMobileMenuVisible && windowWidth >= 992)
+        {
+            CloseMenu();
+        }
+    }
+
+    private void ToggleMenu()
+    {
+        isMenuVisible = !isMenuVisible;
+        isMobileMenuVisible = !isMobileMenuVisible;
+        StateHasChanged();
+    }
+
+    private void CloseMenu()
+    {
+        isMenuVisible = false;
+        isMobileMenuVisible = false;
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        Navigation.LocationChanged -= OnLocationChanged;
+    }
+}
