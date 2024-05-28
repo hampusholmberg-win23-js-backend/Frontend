@@ -1,14 +1,17 @@
-﻿@using Frontend.Components.Pages
+﻿@using Frontend.Components.Models
+@using Frontend.Components.Pages
 @using Frontend.Data
 @using Microsoft.AspNetCore.Identity
+@using System.ComponentModel.DataAnnotations
+@using Newtonsoft.Json
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
 @inject NavigationManager NavigationManager
 @inject HttpClient http
+@inject IConfiguration config
 
 @attribute [StreamRendering]
 @rendermode InteractiveServer
-
 
 @if (user == null)
 {
@@ -21,14 +24,16 @@ else
     <div class="account-menu">
         <div class="account-details">
             <div class="img-div">
-                @* FIXA EN MODEL FÖR UPPLADDNING AV FILER  *@
-                @* <EditForm enctype="multipart/form-data" method="post" Model="@user" FormName="ProfielUpload" OnValidSubmit="HandleProfileUpload"> *@
-                <EditForm enctype="multipart/form-data" method="post" Model="@user" FormName="ProfielUpload">
-                    @* <InputFile id="fileUploader" onchange="HandleProfileUpload()" hidden /> *@
+
+
+                <EditForm enctype="multipart/form-data" method="post" Model="FileUploadForm" FormName="ProfielUpload" OnValidSubmit="HandleSubmit">
+                    <InputFile id="fileUploader" OnChange="HandleSelectedFile" hidden />
                     <label for="fileUploader">
                         <i class="fa-solid fa-arrows-rotate"></i>
                     </label>
                 </EditForm>
+
+
                 <img src="@user.ProfileImage" alt="" />
             </div>
             <h5 class="user-name">@user.FirstName @user.LastName</h5>
@@ -45,8 +50,6 @@ else
     </div>
 }
 
-
-
 @code {
     [Parameter]
     public ApplicationUser user { get; set; } = null!;
@@ -54,13 +57,49 @@ else
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
 
+    [SupplyParameterFromForm]
+    private FileUploadModel FileUploadForm { get; set; } = new();
+
+
+    private IBrowserFile? SelectedFile { get; set; }
+    public string? ImgUrl { get; set; }
+
+
     private void HandleSignOut()
     {
         NavigationManager.NavigateTo("/signout");
     }
 
-    public async Task HandleProfileUpload()
+    public async Task HandleSubmit()
     {
-        // var response = await http.PostAsync(Environment.GetEnvironmentVariable("Api_Fileprovider_Upload"), content);
+        var content = new MultipartFormDataContent();
+        var fileContent = new StreamContent(SelectedFile!.OpenReadStream(SelectedFile.Size));
+
+        fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(SelectedFile.ContentType);
+        content.Add(fileContent, "file", SelectedFile.Name);
+
+        var response = await http.PostAsync(config["Api_FileProvider_Create"], content);
+        var unpacked = await response.Content.ReadAsStringAsync();
+        var jsonUnpacked = JsonConvert.DeserializeObject<FileUploadResponseModel>(unpacked);
+
+        ImgUrl = jsonUnpacked.FilePath;
+        user.ProfileImage = ImgUrl;
+
+        await http.PostAsJsonAsync(config["Api_AccountProvider_Update"], user);
+    }
+
+    public async Task HandleSelectedFile(InputFileChangeEventArgs e)
+    {
+        SelectedFile = e.File;
+
+        FileUploadForm.File = SelectedFile;
+
+        await HandleSubmit();
+    }
+
+    public class FileUploadModel
+    {
+        [Required]
+        public IBrowserFile? File { get; set; }
     }
 }

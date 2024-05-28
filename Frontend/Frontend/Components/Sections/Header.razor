@@ -28,8 +28,14 @@
                     <div id="account-buttons" class="account-buttons hidden">
 
                     <a class="profile-thumb-a" id="profile-thumb-a" href="/account/details">
-                        @* MÅSTE FIXA SÅ ATT DET FINNS STANDARD PROFILBILD OM MAN INTE VALT EN, FÅR EJ VARA NULL!! *@
-                        <img src="/images/icons/no-profile-picture.svg" alt="" class="profile-thumb" />
+
+                        @* HAR EJ LÖST POOLED DB CONTEXT PROBLEMET *@
+                        @* <img src="/images/icons/no-profile-picture.svg" alt="" class="profile-thumb" /> *@
+
+                        <div class="profile-thumb">
+                            <i class="fa-regular fa-address-card"></i>
+                        </div>
+
                     </a>
 
                     </div>
