@@ -1,4 +1,4 @@
-﻿namespace Frontend.Components.Models;
+﻿namespace Frontend.Components.Models.NotUsed;
 
 public class CoursesIndexViewModel
 {

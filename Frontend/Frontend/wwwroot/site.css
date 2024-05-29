@@ -615,6 +615,9 @@ input.input-validation-error {
 input.input-validation-valid {
   border: 1px solid #22C55E;
 }
+input.validation-message {
+  color: #EF4444;
+}
 
 textarea.input-validation-error {
   color: #EF4444;
@@ -623,6 +626,9 @@ textarea.input-validation-error {
 textarea.input-validation-valid {
   color: #22C55E;
   border: 1px solid #22C55E;
+}
+textarea.validation-message {
+  color: #EF4444;
 }
 
 label {

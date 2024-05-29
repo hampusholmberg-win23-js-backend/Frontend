@@ -1,4 +1,4 @@
-﻿namespace CourseProvider.RequestModels;
+﻿namespace Frontend.Components.Models.NotUsed;
 
 public class CourseRequest
 {
